@@ -15,7 +15,7 @@ const currentYear = new Date().getFullYear();
 			content="The Network Stalwart — real-world thoughts, lessons and experiences from designing, deploying and troubleshooting enterprise networks and security."
 		/>
 
-		<link rel="icon" type="image/svg+xml" href="/network-stalwart-favicon.svg" />
+		<link rel="icon" type="image/png" href="/network-stalwart-favicon.png" />
 	</head>
 
 	<body>
@@ -36,7 +36,10 @@ const currentYear = new Date().getFullYear();
 
 				<nav>
 					<a href="/">Home</a>
-					<a href="/blog/">Writing</a>
+					<span class="nav-coming-soon">
+						Writing
+						<span class="tooltip">Coming soon!</span>
+					</span>
 					<!-- <a href="/about/">About</a> -->
 				</nav>
 
@@ -71,9 +74,11 @@ const currentYear = new Date().getFullYear();
 						<span>Enterprise Networking</span>
 					</div>
 
+					<!-- 
 					<a href="/blog/" class="button">
 						Read my writing
 					</a>
+					-->
 
 				</div>
 			</section>
@@ -536,6 +541,53 @@ const currentYear = new Date().getFullYear();
 		.footer-inner {
 			flex-direction: column;
 			align-items: flex-start;
+		}
+
+		.nav-coming-soon {
+			position: relative;
+			color: var(--navy);
+			font-weight: 500;
+			cursor: default;
+		}
+
+		.tooltip {
+			position: absolute;
+			top: 32px;
+			left: 50%;
+			transform: translateX(-50%);
+
+			white-space: nowrap;
+			padding: 6px 10px;
+
+			border-radius: 5px;
+			background: var(--navy);
+			color: white;
+
+			font-size: 0.8rem;
+			font-weight: 600;
+
+			opacity: 0;
+			visibility: hidden;
+			transition: opacity 0.15s ease;
+
+			z-index: 10;
+		}
+
+		.tooltip::before {
+			content: "";
+			position: absolute;
+			top: -5px;
+			left: 50%;
+			transform: translateX(-50%);
+
+			border-left: 5px solid transparent;
+			border-right: 5px solid transparent;
+			border-bottom: 5px solid var(--navy);
+		}
+
+		.nav-coming-soon:hover .tooltip {
+			opacity: 1;
+			visibility: visible;
 		}
 
 	}
