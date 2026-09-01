@@ -56,9 +56,11 @@ const currentYear = new Date().getFullYear();
 
 					<p class="eyebrow">NETWORK &amp; SECURITY</p>
 
+					<!--
 					<h1>Josh Richards</h1>
 
 					<h2>Network &amp; Security Consultant</h2>
+					-->
 
 					<p class="intro">
 						Real-world thoughts, lessons and experiences from designing,
@@ -67,7 +69,6 @@ const currentYear = new Date().getFullYear();
 
 					<div class="topics">
 						<span>Fortinet</span>
-						<span>Extreme Networks</span>
 						<span>Cisco</span>
 						<span>Microsoft</span>
 						<span>Azure</span>
@@ -152,7 +153,7 @@ const currentYear = new Date().getFullYear();
 				<!--
 				<div class="footer-brand">
 					<img
-						src="/network-stalwart-logo.png"
+						src="/network-stalwart-favicon.png"
 						alt=""
 						class="footer-logo"
 					/>
@@ -221,7 +222,7 @@ const currentYear = new Date().getFullYear();
 
 
 	.header-inner {
-		min-height: 105px;
+		min-height: 115px;
 
 		display: flex;
 		align-items: center;
@@ -243,7 +244,7 @@ const currentYear = new Date().getFullYear();
 
 
 	.logo {
-		width: 95px;
+		width: clamp(190px, 22vw, 240px);
 		height: auto;
 		display: block;
 	}
@@ -572,13 +573,20 @@ const currentYear = new Date().getFullYear();
 	@media (max-width: 700px) {
 
 		.header-inner {
-			padding: 16px 0;
+			min-height: auto;
+			padding: 22px 0 20px;
 			flex-direction: column;
+			gap: 16px;
+		}
+
+
+		.logo {
+			width: 210px;
 		}
 
 
 		nav {
-			gap: 22px;
+			gap: 28px;
 		}
 
 
