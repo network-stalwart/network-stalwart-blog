@@ -1,86 +1,452 @@
 ---
-import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
-import Header from '../components/Header.astro';
+import SiteLayout from "./SiteLayout.astro";
 
-type Props = CollectionEntry<'blog'>['data'];
+interface Props {
+	title: string;
+	description: string;
+	pubDate: Date;
+	updatedDate?: Date;
+	tags?: string[];
+}
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const {
+	title,
+	description,
+	pubDate,
+	updatedDate,
+	tags = [],
+} = Astro.props;
+
+const formattedDate = pubDate.toLocaleDateString(
+	"en-GB",
+	{
+		day: "numeric",
+		month: "long",
+		year: "numeric",
+	}
+);
 ---
 
-<html lang="en">
-	<head>
-		<BaseHead title={title} description={description} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-		</style>
-	</head>
+<SiteLayout
+	title={`${title} | The Network Stalwart`}
+	description={description}
+>
 
-	<body>
-		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
+	<article>
+
+		<header class="article-header">
+
+			<div class="container article-header-inner">
+
+				{
+					tags.length > 0 && (
+
+						<div class="article-tags">
+
 							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
+								tags.map((tag) => (
+									<span>{tag}</span>
+								))
+							}
+
+						</div>
+
+					)
+				}
+
+				<p class="article-date">
+					{formattedDate}
+				</p>
+
+				<h1>
+					{title}
+				</h1>
+
+				<p class="article-description">
+					{description}
+				</p>
+
+				{
+					updatedDate && (
+
+						<p class="updated-date">
+							Updated {
+								updatedDate.toLocaleDateString(
+									"en-GB",
+									{
+										day: "numeric",
+										month: "long",
+										year: "numeric",
+									}
 								)
 							}
-						</div>
-						<h1>{title}</h1>
-						<hr />
-					</div>
-					<slot />
-				</div>
-			</article>
-		</main>
-		<Footer />
-	</body>
-</html>
+						</p>
+
+					)
+				}
+
+			</div>
+
+		</header>
+
+
+		<div class="container">
+
+			<div class="article-body">
+
+				<slot />
+
+			</div>
+
+		</div>
+
+	</article>
+
+</SiteLayout>
+
+
+<style>
+
+	.article-header {
+		padding: 90px 0 75px;
+
+		background:
+			linear-gradient(
+				135deg,
+				#ffffff 0%,
+				#f6f9fa 100%
+			);
+
+		border-bottom: 1px solid var(--border);
+	}
+
+
+	.article-header-inner {
+		max-width: 900px;
+
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+
+	.article-tags {
+		margin-bottom: 22px;
+
+		display: flex;
+		flex-wrap: wrap;
+
+		gap: 8px;
+	}
+
+
+	.article-tags span {
+		padding: 6px 11px;
+
+		border: 1px solid var(--border);
+		border-radius: 100px;
+
+		background: white;
+
+		color: var(--navy);
+
+		font-size: 0.78rem;
+		font-weight: 700;
+	}
+
+
+	.article-date {
+		margin: 0 0 15px;
+
+		color: var(--teal);
+
+		font-size: 0.82rem;
+		font-weight: 800;
+
+		letter-spacing: 0.14em;
+
+		text-transform: uppercase;
+	}
+
+
+	h1 {
+		max-width: 850px;
+
+		margin: 0;
+
+		color: var(--navy);
+
+		font-size: clamp(2.6rem, 6vw, 5rem);
+
+		line-height: 1;
+
+		letter-spacing: -0.05em;
+	}
+
+
+	.article-description {
+		max-width: 720px;
+
+		margin: 28px 0 0;
+
+		color: #4f5a6b;
+
+		font-size: 1.22rem;
+
+		line-height: 1.65;
+	}
+
+
+	.updated-date {
+		margin: 18px 0 0;
+
+		color: var(--muted);
+
+		font-size: 0.85rem;
+	}
+
+
+	.article-body {
+		max-width: 780px;
+
+		margin: 0 auto;
+
+		padding: 80px 0 100px;
+
+		color: #3f4a5b;
+
+		font-size: 1.06rem;
+
+		line-height: 1.8;
+	}
+
+
+	.article-body :global(p) {
+		margin: 0 0 1.6em;
+	}
+
+
+	.article-body :global(h2) {
+		margin: 2.3em 0 0.75em;
+
+		color: var(--navy);
+
+		font-size: clamp(1.8rem, 4vw, 2.5rem);
+
+		line-height: 1.15;
+
+		letter-spacing: -0.035em;
+	}
+
+
+	.article-body :global(h3) {
+		margin: 2em 0 0.65em;
+
+		color: var(--navy);
+
+		font-size: 1.4rem;
+
+		line-height: 1.25;
+	}
+
+
+	.article-body :global(h4) {
+		margin: 1.8em 0 0.6em;
+
+		color: var(--navy);
+
+		font-size: 1.15rem;
+	}
+
+
+	.article-body :global(strong) {
+		color: var(--navy);
+	}
+
+
+	.article-body :global(a) {
+		color: #258b96;
+
+		font-weight: 600;
+
+		text-decoration-thickness: 1px;
+		text-underline-offset: 3px;
+	}
+
+
+	.article-body :global(a:hover) {
+		color: var(--orange);
+	}
+
+
+	.article-body :global(ul),
+	.article-body :global(ol) {
+		margin: 0 0 1.7em;
+
+		padding-left: 1.6em;
+	}
+
+
+	.article-body :global(li) {
+		margin-bottom: 0.5em;
+	}
+
+
+	.article-body :global(blockquote) {
+		margin: 2em 0;
+
+		padding: 20px 25px;
+
+		border-left: 5px solid var(--teal);
+
+		background: var(--light-background);
+
+		color: var(--navy);
+
+		font-size: 1.08rem;
+
+		font-weight: 600;
+	}
+
+
+	.article-body :global(blockquote p:last-child) {
+		margin-bottom: 0;
+	}
+
+
+	.article-body :global(pre) {
+		margin: 2em 0;
+
+		padding: 24px;
+
+		overflow-x: auto;
+
+		border-radius: 8px;
+
+		border-left: 5px solid var(--teal);
+
+		background: #1d293d !important;
+
+		box-shadow:
+			0 12px 30px
+			rgba(37, 51, 75, 0.10);
+	}
+
+
+	.article-body :global(pre code) {
+		padding: 0;
+
+		background: transparent;
+
+		color: inherit;
+
+		font-size: 0.9rem;
+
+		line-height: 1.65;
+	}
+
+
+	.article-body :global(code) {
+		padding: 2px 6px;
+
+		border-radius: 4px;
+
+		background: #edf2f4;
+
+		color: var(--navy);
+
+		font-family:
+			"SFMono-Regular",
+			Consolas,
+			"Liberation Mono",
+			Menlo,
+			monospace;
+
+		font-size: 0.88em;
+	}
+
+
+	.article-body :global(hr) {
+		margin: 3em 0;
+
+		border: 0;
+
+		border-top: 1px solid var(--border);
+	}
+
+
+	.article-body :global(table) {
+		width: 100%;
+
+		margin: 2em 0;
+
+		border-collapse: collapse;
+
+		font-size: 0.95rem;
+	}
+
+
+	.article-body :global(th),
+	.article-body :global(td) {
+		padding: 12px 14px;
+
+		border: 1px solid var(--border);
+
+		text-align: left;
+	}
+
+
+	.article-body :global(th) {
+		background: var(--navy);
+
+		color: white;
+	}
+
+
+	.article-body :global(img) {
+		display: block;
+
+		width: auto;
+		max-width: 100%;
+
+		margin: 2.2em auto;
+
+		border-radius: 6px;
+	}
+
+
+	@media (max-width: 700px) {
+
+		.article-header {
+			padding: 65px 0 55px;
+		}
+
+
+		h1 {
+			font-size: clamp(2.5rem, 12vw, 3.7rem);
+		}
+
+
+		.article-description {
+			font-size: 1.08rem;
+		}
+
+
+		.article-body {
+			padding: 55px 0 75px;
+
+			font-size: 1rem;
+		}
+
+
+		.article-body :global(pre) {
+			margin-left: -10px;
+			margin-right: -10px;
+
+			padding: 20px 18px;
+
+			border-radius: 6px;
+		}
+
+	}
+
+</style>
