@@ -1,281 +1,137 @@
 ---
-const currentYear = new Date().getFullYear();
+import { getCollection } from "astro:content";
+
+import SiteLayout from "../layouts/SiteLayout.astro";
+
+const posts = (await getCollection("blog"))
+	.sort(
+		(a, b) =>
+			b.data.pubDate.valueOf() -
+			a.data.pubDate.valueOf()
+	)
+	.slice(0, 3);
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+<SiteLayout
+	title="The Network Stalwart | Josh Richards"
+	description="The Network Stalwart — real-world thoughts, lessons and experiences from designing, deploying and troubleshooting enterprise networks and security."
+>
 
-		<title>The Network Stalwart | Josh Richards</title>
+	<section class="hero">
 
-		<meta
-			name="description"
-			content="The Network Stalwart — real-world thoughts, lessons and experiences from designing, deploying and troubleshooting enterprise networks and security."
-		/>
+		<div class="container hero-inner">
 
-		<link rel="icon" type="image/png" href="/network-stalwart-favicon.png" />
-	</head>
+			<p class="eyebrow">
+				NETWORK &amp; SECURITY
+			</p>
 
-	<body>
-		<header class="site-header">
-			<div class="container header-inner">
+			<p class="intro">
+				Real-world thoughts, lessons and experiences from designing,
+				deploying and troubleshooting enterprise networks and security.
+			</p>
 
-				<a href="/" class="brand">
-					<img
-						src="/network-stalwart-logo.png"
-						alt="The Network Stalwart"
-						class="logo"
-					/>
+			<div class="topics">
+				<span>Fortinet</span>
+				<span>Cisco</span>
+				<span>Microsoft</span>
+				<span>Azure</span>
+				<span>SASE</span>
+				<span>SD-WAN</span>
+				<span>Enterprise Networking</span>
+			</div>
 
-					<!--
-					<span class="brand-name">
-						The Network Stalwart
-					</span>
-					-->
+		</div>
+
+	</section>
+
+
+	<section class="section">
+
+		<div class="container">
+
+			<p class="section-label">
+				LATEST WRITING
+			</p>
+
+			<h2 class="section-title">
+				Notes from the field.
+			</h2>
+
+			<div class="writing-grid">
+
+				{
+					posts.map((post) => (
+
+						<article class="writing-card">
+
+							<div>
+
+								<p class="article-date">
+									{
+										post.data.pubDate.toLocaleDateString(
+											"en-GB",
+											{
+												day: "numeric",
+												month: "long",
+												year: "numeric",
+											}
+										)
+									}
+								</p>
+
+								<h3>
+									<a href={`/blog/${post.id}/`}>
+										{post.data.title}
+									</a>
+								</h3>
+
+								<p class="writing-description">
+									{post.data.description}
+								</p>
+
+							</div>
+
+							{
+								post.data.tags?.length > 0 && (
+
+									<div class="tags">
+
+										{
+											post.data.tags.map((tag) => (
+												<span class="tag">
+													{tag}
+												</span>
+											))
+										}
+
+									</div>
+
+								)
+							}
+
+						</article>
+
+					))
+				}
+
+			</div>
+
+			<div class="all-writing">
+
+				<a href="/blog/" class="text-link-dark">
+					All writing →
 				</a>
 
-				<nav>
-					<a href="/">Home</a>
-					<span class="nav-coming-soon">
-						Writing
-						<span class="tooltip">Coming soon!</span>
-					</span>
-					<!-- <a href="/about/">About</a> -->
-				</nav>
-
 			</div>
-		</header>
 
+		</div>
 
-		<main>
+	</section>
 
-			<section class="hero">
-				<div class="container hero-inner">
-
-					<p class="eyebrow">NETWORK &amp; SECURITY</p>
-
-					<!--
-					<h1>Josh Richards</h1>
-
-					<h2>Network &amp; Security Consultant</h2>
-					-->
-
-					<p class="intro">
-						Real-world thoughts, lessons and experiences from designing,
-						deploying and troubleshooting enterprise networks and security.
-					</p>
-
-					<div class="topics">
-						<span>Fortinet</span>
-						<span>Cisco</span>
-						<span>Microsoft</span>
-						<span>Azure</span>
-						<span>SASE</span>
-						<span>SD-WAN</span>
-						<span>Enterprise Networking</span>
-					</div>
-
-					<!-- 
-					<a href="/blog/" class="button">
-						Read my writing
-					</a>
-					-->
-
-				</div>
-			</section>
-
-
-			<section class="section">
-				<div class="container">
-
-					<p class="section-label">LATEST WRITING</p>
-
-					<h2 class="section-title">Notes from the field.</h2>
-
-					<div class="coming-soon">
-						<div>
-							<h3>First article coming soon.</h3>
-
-							<p>
-								Technical write-ups covering real-world troubleshooting,
-								design decisions and lessons learned across networking and
-								security.
-							</p>
-						</div>
-					</div>
-
-				</div>
-			</section>
-
-
-			<section class="section about-section">
-				<div class="container about-grid">
-
-					<div>
-						<p class="section-label">ABOUT</p>
-
-						<h2 class="section-title">
-							Enterprise networking.<br />
-							Real-world experience.
-						</h2>
-					</div>
-
-					<div class="about-copy">
-						<p>
-							I'm a Network &amp; Security Consultant working across enterprise
-							networking, cloud connectivity and security.
-						</p>
-
-						<p>
-							The Network Stalwart is where I write about things I've learned
-							in the field — including troubleshooting, design decisions and
-							lessons from real-world deployments.
-						</p>
-
-						<!-- 
-						<a href="/about/" class="text-link">
-							More about me →
-						</a>
-						-->
-
-					</div>
-
-				</div>
-			</section>
-
-		</main>
-
-
-		<footer>
-			<div class="container footer-inner">
-				<!--
-				<div class="footer-brand">
-					<img
-						src="/network-stalwart-favicon.png"
-						alt=""
-						class="footer-logo"
-					/>
-					<span>The Network Stalwart</span>
-				</div>
-				-->
-
-				<p>© {currentYear} The Network Stalwart</p>
-			</div>
-		</footer>
-
-	</body>
-</html>
+</SiteLayout>
 
 
 <style>
-
-	:root {
-		--navy: #25334B;
-		--teal: #51B6BF;
-		--orange: #EC7F27;
-
-		--text: #25334B;
-		--muted: #687386;
-		--background: #ffffff;
-		--light-background: #f5f7f9;
-		--border: #e3e8ec;
-	}
-
-
-	* {
-		box-sizing: border-box;
-	}
-
-
-	html {
-		font-family:
-			Inter,
-			Arial,
-			Helvetica,
-			sans-serif;
-
-		color: var(--text);
-		background: var(--background);
-	}
-
-
-	body {
-		margin: 0;
-		line-height: 1.6;
-	}
-
-
-	.container {
-		width: min(1120px, calc(100% - 40px));
-		margin: 0 auto;
-	}
-
-
-	/* HEADER */
-
-	.site-header {
-		background: white;
-		border-bottom: 1px solid var(--border);
-	}
-
-
-	.header-inner {
-		min-height: 115px;
-
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-
-		gap: 30px;
-	}
-
-
-	.brand {
-		display: flex;
-		align-items: center;
-
-		gap: 14px;
-
-		text-decoration: none;
-		color: var(--navy);
-	}
-
-
-	.logo {
-		width: clamp(190px, 22vw, 240px);
-		height: auto;
-		display: block;
-	}
-
-
-	.brand-name {
-		font-size: 1.25rem;
-		font-weight: 700;
-		letter-spacing: -0.02em;
-	}
-
-
-	nav {
-		display: flex;
-		gap: 32px;
-	}
-
-
-	nav a {
-		color: var(--navy);
-		text-decoration: none;
-		font-weight: 500;
-	}
-
-
-	nav a:hover {
-		color: var(--teal);
-	}
-
-
-	/* HERO */
 
 	.hero {
 		padding: 110px 0 120px;
@@ -291,6 +147,7 @@ const currentYear = new Date().getFullYear();
 
 	.hero-inner {
 		max-width: 850px;
+
 		margin-left: auto;
 		margin-right: auto;
 
@@ -298,8 +155,7 @@ const currentYear = new Date().getFullYear();
 	}
 
 
-	.eyebrow,
-	.section-label {
+	.eyebrow {
 		margin: 0 0 18px;
 
 		font-size: 0.8rem;
@@ -311,41 +167,19 @@ const currentYear = new Date().getFullYear();
 	}
 
 
-	h1 {
-		margin: 0;
-
-		font-size: clamp(3.2rem, 8vw, 6.5rem);
-		line-height: 0.95;
-
-		letter-spacing: -0.055em;
-
-		color: var(--navy);
-	}
-
-
-	.hero h2 {
-		margin: 24px 0 0;
-
-		font-size: clamp(1.4rem, 3vw, 2rem);
-		font-weight: 500;
-
-		color: var(--muted);
-	}
-
-
 	.intro {
 		max-width: 720px;
 
-		margin:
-			32px auto 0;
+		margin: 32px auto 0;
 
 		font-size: 1.2rem;
+
 		color: #4f5a6b;
 	}
 
 
 	.topics {
-		margin: 30px 0 38px;
+		margin: 30px 0 0;
 
 		display: flex;
 		flex-wrap: wrap;
@@ -368,244 +202,101 @@ const currentYear = new Date().getFullYear();
 	}
 
 
-	.button {
-		display: inline-block;
-
-		padding: 13px 22px;
-
-		border-radius: 6px;
-
-		background: var(--navy);
-		color: white;
-
-		font-weight: 700;
-		text-decoration: none;
+	.writing-grid {
+		display: grid;
+		gap: 24px;
 	}
 
 
-	.button:hover {
-		background: var(--teal);
-	}
+	.writing-card {
+		padding: 32px 34px;
 
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
 
-	/* CONTENT */
-
-	.section {
-		padding: 90px 0;
-	}
-
-
-	.section-title {
-		margin: 0 0 38px;
-
-		font-size: clamp(2rem, 4vw, 3rem);
-		line-height: 1.1;
-
-		letter-spacing: -0.035em;
-
-		color: var(--navy);
-	}
-
-
-	.coming-soon {
-		padding: 35px;
+		gap: 30px;
 
 		border-left: 5px solid var(--orange);
+
 		background: var(--light-background);
 	}
 
 
-	.coming-soon h3 {
-		margin: 0 0 7px;
-		font-size: 1.35rem;
+	.article-date {
+		margin: 0 0 9px;
+
+		color: var(--teal);
+
+		font-size: 0.8rem;
+		font-weight: 800;
+
+		letter-spacing: 0.08em;
+
+		text-transform: uppercase;
 	}
 
 
-	.coming-soon p {
+	.writing-card h3 {
+		margin: 0 0 9px;
+
+		font-size: 1.4rem;
+		line-height: 1.25;
+	}
+
+
+	.writing-card h3 a {
+		color: var(--navy);
+		text-decoration: none;
+	}
+
+
+	.writing-card h3 a:hover {
+		color: var(--teal);
+	}
+
+
+	.writing-description {
+		max-width: 720px;
+
 		margin: 0;
-		max-width: 700px;
+
 		color: var(--muted);
 	}
 
 
-	.about-section {
-		background: var(--navy);
-		color: white;
+	.all-writing {
+		margin-top: 32px;
 	}
 
 
-	.about-section .section-label {
-		color: var(--teal);
-	}
+	.text-link-dark {
+		color: var(--navy);
 
-
-	.about-section .section-title {
-		color: white;
-	}
-
-
-	.about-grid {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-
-		gap: 90px;
-		align-items: start;
-	}
-
-
-	.about-copy {
-		font-size: 1.08rem;
-		color: #d8dde5;
-	}
-
-
-	.about-copy p:first-child {
-		margin-top: 0;
-	}
-
-
-	.text-link {
-		display: inline-block;
-		margin-top: 15px;
-
-		color: var(--teal);
 		font-weight: 700;
 		text-decoration: none;
 	}
 
 
-	.text-link:hover {
-		color: white;
+	.text-link-dark:hover {
+		color: var(--teal);
 	}
 
-
-	/* FOOTER */
-
-	footer {
-		padding: 36px 0;
-
-		background: #1d293d;
-		color: #bfc7d2;
-
-		font-size: 0.9rem;
-	}
-
-
-	.footer-inner {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-
-		gap: 30px;
-	}
-
-
-	.footer-brand {
-		display: flex;
-		align-items: center;
-		gap: 10px;
-
-		color: white;
-		font-weight: 600;
-	}
-
-
-	.footer-logo {
-		width: 28px;
-		height: 28px;
-		object-fit: contain;
-	}
-
-
-
-	/* WRITING TOOLTIP */
-
-	.nav-coming-soon {
-		position: relative;
-		color: var(--navy);
-		font-weight: 500;
-		cursor: default;
-	}
-
-	.tooltip {
-		position: absolute;
-		top: 32px;
-		left: 50%;
-		transform: translateX(-50%);
-
-		white-space: nowrap;
-		padding: 6px 10px;
-
-		border-radius: 5px;
-		background: var(--navy);
-		color: white;
-
-		font-size: 0.8rem;
-		font-weight: 600;
-
-		opacity: 0;
-		visibility: hidden;
-		transition: opacity 0.15s ease;
-
-		z-index: 10;
-	}
-
-	.tooltip::before {
-		content: "";
-		position: absolute;
-		top: -5px;
-		left: 50%;
-		transform: translateX(-50%);
-
-		border-left: 5px solid transparent;
-		border-right: 5px solid transparent;
-		border-bottom: 5px solid var(--navy);
-	}
-
-	.nav-coming-soon:hover .tooltip {
-		opacity: 1;
-		visibility: visible;
-	}
-
-
-	/* MOBILE */
 
 	@media (max-width: 700px) {
-
-		.header-inner {
-			min-height: auto;
-			padding: 22px 0 20px;
-			flex-direction: column;
-			gap: 16px;
-		}
-
-
-		.logo {
-			width: 210px;
-		}
-
-
-		nav {
-			gap: 28px;
-		}
-
 
 		.hero {
 			padding: 75px 0 85px;
 		}
 
 
-		.about-grid {
-			grid-template-columns: 1fr;
+		.writing-card {
+			padding: 28px 25px;
+
+			flex-direction: column;
+
 			gap: 20px;
 		}
-
-
-		.footer-inner {
-			flex-direction: column;
-			align-items: flex-start;
-		}
-
 
 	}
 
