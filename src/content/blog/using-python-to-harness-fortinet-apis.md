@@ -1,9 +1,15 @@
----
 
+---
 title: 'Using Python to Harness the Power of the Fortinet APIs'
 description: 'How I used the FortiSASE REST API and Python to turn endpoint and VPN session data into useful, real-time operational insight.'
-pubDate: 'Sep 02 2026'
-----------------------
+pubDate: '2026-09-02'
+tags:
+  - Fortinet
+  - FortiSASE
+  - Python
+  - Automation
+---
+
 
 A management portal is great when a human wants to look at something once.
 
