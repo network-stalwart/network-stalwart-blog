@@ -1,114 +1,253 @@
 ---
-import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
-import BaseHead from '../../components/BaseHead.astro';
-import Footer from '../../components/Footer.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
-import Header from '../../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import { getCollection } from "astro:content";
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+import SiteLayout from "../../layouts/SiteLayout.astro";
+
+const posts = (await getCollection("blog"))
+	.sort(
+		(a, b) =>
+			b.data.pubDate.valueOf() -
+			a.data.pubDate.valueOf()
+	);
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 960px;
+<SiteLayout
+	title="Writing | The Network Stalwart"
+	description="Technical writing from The Network Stalwart covering enterprise networking, security, Fortinet, cloud connectivity, SASE and real-world troubleshooting."
+>
+
+	<section class="writing-hero">
+
+		<div class="container writing-hero-inner">
+
+			<p class="section-label">
+				WRITING
+			</p>
+
+			<h1>
+				Notes from the field.
+			</h1>
+
+			<p>
+				Technical write-ups covering real-world troubleshooting,
+				design decisions and lessons learned across networking,
+				security and cloud connectivity.
+			</p>
+
+		</div>
+
+	</section>
+
+
+	<section class="section">
+
+		<div class="container writing-list">
+
+			{
+				posts.map((post) => (
+
+					<article class="post-card">
+
+						<p class="post-date">
+
+							{
+								post.data.pubDate.toLocaleDateString(
+									"en-GB",
+									{
+										day: "numeric",
+										month: "long",
+										year: "numeric",
+									}
+								)
+							}
+
+						</p>
+
+						<h2>
+							<a href={`/blog/${post.id}/`}>
+								{post.data.title}
+							</a>
+						</h2>
+
+						<p class="post-description">
+							{post.data.description}
+						</p>
+
+						{
+							post.data.tags?.length > 0 && (
+
+								<div class="tags">
+
+									{
+										post.data.tags.map((tag) => (
+											<span class="tag">
+												{tag}
+											</span>
+										))
+									}
+
+								</div>
+
+							)
+						}
+
+						<a
+							href={`/blog/${post.id}/`}
+							class="read-link"
+						>
+							Read article →
+						</a>
+
+					</article>
+
+				))
 			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<Header />
-		<main>
-			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
-									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
-		</main>
-		<Footer />
-	</body>
-</html>
+
+		</div>
+
+	</section>
+
+</SiteLayout>
+
+
+<style>
+
+	.writing-hero {
+		padding: 95px 0 90px;
+
+		background:
+			linear-gradient(
+				135deg,
+				#ffffff 0%,
+				#f6f9fa 100%
+			);
+
+		border-bottom: 1px solid var(--border);
+	}
+
+
+	.writing-hero-inner {
+		max-width: 850px;
+	}
+
+
+	.writing-hero h1 {
+		margin: 0;
+
+		color: var(--navy);
+
+		font-size: clamp(3rem, 7vw, 5.5rem);
+
+		line-height: 0.98;
+
+		letter-spacing: -0.055em;
+	}
+
+
+	.writing-hero-inner > p:last-child {
+		max-width: 720px;
+
+		margin: 28px 0 0;
+
+		color: #4f5a6b;
+
+		font-size: 1.15rem;
+	}
+
+
+	.writing-list {
+		display: grid;
+		gap: 28px;
+	}
+
+
+	.post-card {
+		padding: 36px;
+
+		border-left: 5px solid var(--orange);
+
+		background: var(--light-background);
+	}
+
+
+	.post-date {
+		margin: 0 0 10px;
+
+		color: var(--teal);
+
+		font-size: 0.8rem;
+		font-weight: 800;
+
+		letter-spacing: 0.1em;
+
+		text-transform: uppercase;
+	}
+
+
+	.post-card h2 {
+		max-width: 780px;
+
+		margin: 0 0 12px;
+
+		font-size: clamp(1.6rem, 3vw, 2.1rem);
+
+		line-height: 1.2;
+
+		letter-spacing: -0.025em;
+	}
+
+
+	.post-card h2 a {
+		color: var(--navy);
+
+		text-decoration: none;
+	}
+
+
+	.post-card h2 a:hover {
+		color: var(--teal);
+	}
+
+
+	.post-description {
+		max-width: 760px;
+
+		margin: 0 0 20px;
+
+		color: var(--muted);
+	}
+
+
+	.post-card .tags {
+		margin-bottom: 21px;
+	}
+
+
+	.read-link {
+		color: var(--navy);
+
+		font-weight: 700;
+
+		text-decoration: none;
+	}
+
+
+	.read-link:hover {
+		color: var(--teal);
+	}
+
+
+	@media (max-width: 700px) {
+
+		.writing-hero {
+			padding: 70px 0;
+		}
+
+
+		.post-card {
+			padding: 27px 24px;
+		}
+
+	}
+
+</style>
